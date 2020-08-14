@@ -1,0 +1,427 @@
+﻿How To Create Laravel-Sanctum Api Used Step By Step And Code :
+**********************************************************************************
+Url :
+Source Code :
+https://github.com/anil-sidhu/laravel-sanctum
+
+
+Step by step Method is be There :
+https://www.youtube.com/watch?v=pK99xioEUUM
+
+
+*********************************************************
+Creating Multiple entries method is used in This link :
+How to create Crud in Api Creating in Laravel step by step moves to ease it. 
+
+
+Source code Step :
+
+
+https://coderaweso.me/laravel-rest-api-crud/
+
+
+Source Code : on github 
+https://github.com/tharindulucky/laravel-crud-api
+
+
+Youtube Video is :
+
+
+https://www.youtube.com/watch?v=kSYRikBXlxY
+
+
+************************************************
+
+
+How to Create Laravel Sanctum Api Method In Laravel Steps :
+++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+Laravel Sanctum
+What is Laravel Sanctum ? Laravel Sanctum provides a featherweight authentication system for SPAs (single page applications), mobile applications, and simple, token based APIs. Sanctum allows each user of your application to generate multiple API tokens for their account. These tokens may be granted abilities / scopes which specify which actions the tokens are allowed to perform..
+You have to just follow a few steps to get following web services
+Login API
+Details API
+Getting Started
+Step 1: setup database in .env file
+DB_DATABASE=youtube
+DB_USERNAME=root
+DB_PASSWORD= redhat@123
+
+
+Step 2:Install Laravel Sanctum.
+composer require laravel/sanctum
+
+
+Step 3:Publish the Sanctum configuration and migration files .
+php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider"
+
+
+
+
+Step 4:Run your database migrations.
+php artisan migrate
+
+
+
+
+Step 5:Add the Sanctum's middleware.
+../app/Http/Kernel.php
+
+
+use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
+
+
+...
+
+
+    protected $middlewareGroups = [
+        ...
+
+
+        'api' => [
+            EnsureFrontendRequestsAreStateful::class,
+            'throttle:60,1',
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+        ],
+    ];
+
+
+    ...
+],
+
+
+
+
+Step 6:To use tokens for users.
+use Laravel\Sanctum\HasApiTokens;
+
+
+class User extends Authenticatable
+{
+    use HasApiTokens, Notifiable;
+}
+
+
+
+
+Step 7:Let's create the seeder for the User model
+php artisan make:seeder UsersTableSeeder
+Step 8:Now let's insert as record
+DB::table('users')->insert([
+    'name' => 'John Doe',
+    'email' => 'john@doe.com',
+    'password' => Hash::make('password')
+]);
+Step 9:To seed users table with user
+php artisan db:seed --class=UsersTableSeeder
+Step 10: create a controller nad /login route in the routes/api.php file:
+<?php
+
+
+namespace App\Http\Controllers;
+
+
+use Illuminate\Http\Request;
+use App\User;
+use Illuminate\Support\Facades\Hash;
+class UserController extends Controller
+{
+    // 
+
+
+    function index(Request $request)
+    {
+        $user= User::where('email', $request->email)->first();
+        // print_r($data);
+            if (!$user || !Hash::check($request->password, $user->password)) {
+                return response([
+                    'message' => ['These credentials do not match our records.']
+                ], 404);
+            }
+        
+             $token = $user->createToken('my-app-token')->plainTextToken;
+        
+            $response = [
+                'user' => $user,
+                'token' => $token
+            ];
+        
+             return response($response, 201);
+    }
+}
+
+
+Step 11: Test with postman, Result will be below
+{
+    "user": {
+        "id": 1,
+        "name": "John Doe",
+        "email": "john@doe.com",
+        "email_verified_at": null,
+        "created_at": null,
+        "updated_at": null
+    },
+    "token": "AbQzDgXa..."
+}
+
+Step 11: Make Details API or any other with secure route
+Route::middleware('auth:sanctum')->get('/user', function () {
+   //controller path 
+});
+ 
+********************
+Pass postman Url is :
+
+http://127.0.0.1:8000/api/login
+
+and pass body in form (data is email : login user And Password : Set user while register data )
+
+After hit post url getting data 
+
++++++++++++++++++++++++++++
+
+This type Data get It.
+
+{
+    "user": {
+        "id": 1,
+        "name": "Saurabh",
+        "email": "saurabh@gmail.com",
+        "email_verified_at": null,
+        "created_at": null,
+        "updated_at": null
+    },
+    "token": "2|71mkZPn1q895X4m51gN5UYkA54dh7ulOLbPvtv5Nhl3VxPZWTnleLle08kXuUlI2zaTuPHFFKqCtH6e0"
+}
++++++++++++++++++++++++++++
+
+********************
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+How To create Crud Api In Laravel 7.0  
+**********************************************
+
+
+You are here: Home / Programming / Laravel / REST API in Laravel with CRUD functionality
+REST API in Laravel with CRUD functionality
+Laravel is used to build various server-side applications in the industry. Using Laravel to build APIs is a quite popular these days since it’s fairly easy with Laravel. It comes with Migrations, Pre-defined validations, Easy to manage MVC architecture and so on. And today we’re gonna learn how to build a REST API in Laravel with CRUD functionality
+In this tutorial we’re building a Simple REST API with CRUD (Create, Read, Update, Delete) functionality using Laravel. We’ll be creating an API that manages Products. So, the API will be able to Create, Read, Update and Delete products in the database.
+Getting Started – REST API in Laravel with CRUD
+First thing’s first! Let’s get started by Installing and Setting Up Laravel.
+Once the installation is complete, edit the .env file with correct details.
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=crud_api
+DB_USERNAME=root
+DB_PASSWORD=
+Create Migrations
+Next Let’s create a Migration that create a table to store the products. Go to the terminal and hit the following command to create the migration.
+php artisan make:migration create_products_table
+Open up that migration file and define the table.
+01
+02
+03
+04
+05
+06
+07
+08
+09
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+	class CreateProductsTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('products', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('title');
+            $table->text('description');
+            $table->float('price');
+            $table->string('tags');
+            $table->timestamps();
+        });
+    }
+ 
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('products');
+    }
+}
+	Great! Now run that migration with the following command to acctually create the table.
+php artisan:migrate
+OK, next step to create a model for the table and a controller to create all the methods that do the functionality. Let’s do that real quick.
+Model and the Controller
+To create the model:
+php artisan make:model Product
+Laravel has a special system that matches the naming conventions and automatically maps the table to the model. So, if the table name is “items”, name the model “Item”. If you follow this naming convention pattern, you don’t need to define the table name in the model.
+OK, now create the controller as well:
+php artisan make:controller ProductController --resource
+The reason, I used –resource keyword at the end of command is that it create all the CRUD methods automatically. These are called resource controllers.
+One final step before start coding. Creating routes.
+Define Routes
+Routes are the URLs that we can access the methods in the controller.
+Open up the routes folder and open api.php file. Add this line of code.
+Route::resource('/products', 'ProductController');
+This is a Resource route. This contains all the routes needed for a CRUD. Which is POST, GET, PATCH, DELETE.
+Great! Now we got everything in place to develop the application logic for the API.
+Develop the API
+Before start writing any code, I recommend you to download and install Postman for testing the API. We use postman to call all the endpoints of the API.
+Alright, let’s get into coding.
+store() 
+Open the ProductController.php and let’s start editing store() method.
+01
+02
+03
+04
+05
+06
+07
+08
+09
+10
+11
+	public function store(Request $request)
+    {
+        $product = new Product();
+        $product->title = $request->title;
+        $product->description = $request->description;
+        $product->price = $request->price;
+        $product->tags = $request->tags;
+        $product->save();
+ 
+        return response()->json(['status' => 'Success', 'message' => 'Product Saved']);
+    }
+	First we create an object of the Product model and then assign values to it’s parameters.
+Now. let’s test this on Postman. Open up a new tab and type URL as follows.
+https://{YOUR_LOCAL_HOST}/api_laravel/public/api/products
+ REST API in Laravel with CRUD  - Type URL in Postman 
+
+Now Change the request method to POST. Great! Next add the JSON body as a raw.
+Now everything is set and hit send button. If everything was followed correctly, you should get this response.
+ REST API in Laravel with CRUD  - Response 
+
+Cool, isn’t it?
+Now you can add products using the API.
+update() 
+Alright, now same way, we can create the UPDATE method as well. Add the following code to your update() method.
+01
+02
+03
+04
+05
+06
+07
+08
+09
+10
+11
+	public function update(Request $request, $id)
+    {
+        $product = Product::find($id);
+        $product->title = $request->title;
+        $product->description = $request->description;
+        $product->price = $request->price;
+        $product->tags = $request->tags;
+        $product->save();
+ 
+        return response()->json(['status' => 'Success', 'message' => 'Product Updated']);
+    }
+	Here we don’t create a new record. We find the particular row with the ID of the product and then we update it.
+Again, open up Postman and add the URL as follows.
+https://{YOUR_LOCAL_HOST}/api_laravel/public/api/products/{ID}
+And change the request method to PATCH. Add the JSON body same as we added earlier. And hit enter. You’ll get the following response if no errors.
+ REST API in Laravel with CRUD  - Response 
+
+Now we implemented CREATE and UPDATE products. Now it’s time to implement GET ALL PRODUCTS and GET SINGLE PRODUCT endpoints.
+index()
+Here we write code to get all the saved product.
+1
+2
+3
+4
+5
+	public function index()
+    {
+        $products = Product::all();
+        return response()->json(['status' => 'Success', 'data' => $products]);
+    }
+	This is a GET request. So, change the Request type to GET.
+https://{YOUR_LOCAL_HOST}/api_laravel/public/api/products
+And we don’t add request body for this request.
+You’ll get this, as the response.
+ REST API in Laravel with CRUD  - all Products - Postman 
+
+show()
+Same way add the code for viewing a Single product.
+1
+2
+3
+4
+5
+	public function show($id)
+    {
+        $product = Product::find($id);
+        return response()->json(['status' => 'Success', 'data' => $product]);
+    }
+	This is also a GET request.
+https://{YOUR_LOCAL_HOST}/api_laravel/public/api/products/{ID}
+You’ll get this, as the response
+ REST API in Laravel with CRUD  - Single Product -- Postman 
+
+ 
+destroy()
+Alright! Now let’s write the final method of this API. Which is DELETE.
+1
+2
+3
+4
+5
+6
+	public function destroy($id)
+    {
+        $product = Product::find($id);
+        $product->delete();
+        return response()->json(['status' => 'Success', 'Message' => 'Product Deleted']);
+    }
+	This is a DELETE method. Change the request method to DELETE and add the URL as follows.
+https://{YOUR_LOCAL_HOST}/api_laravel/public/api/products/{ID}
+You’ll get this response.
+ REST API in Laravel with CRUD  - delete product postman 
+
+Great! Now our API is pretty much complete. We created an almost complete REST API in Laravel with CRUD functionality. Using this API,  You can CREATE, READ, UPDATE and DELETE items.
+This is just a starting point. In our next tutorials, we’re gonna discuss how to improve this API to match more practical scenarios such as Validations, Authentication and File handling and so much more.
